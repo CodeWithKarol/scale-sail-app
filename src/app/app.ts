@@ -6,6 +6,7 @@ import { Features } from './features/features';
 import { About } from './about/about';
 import { Products } from './products/products';
 import { ProductOverview } from './product-overview/product-overview';
+import { Process } from './process/process';
 import { Blog } from './blog/blog';
 import { Faq } from './faq/faq';
 import { Footer } from './footer/footer';
@@ -20,6 +21,7 @@ import { Footer } from './footer/footer';
     About,
     Products,
     ProductOverview,
+    Process,
     Blog,
     Faq,
     Footer,
