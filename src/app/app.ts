@@ -4,13 +4,14 @@ import { Header } from './header/header';
 import { Hero } from './hero/hero';
 import { Features } from './features/features';
 import { About } from './about/about';
+import { Products } from './products/products';
 import { Blog } from './blog/blog';
 import { Faq } from './faq/faq';
 import { Footer } from './footer/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Hero, Features, About, Blog, Faq, Footer],
+  imports: [RouterOutlet, Header, Hero, Features, About, Products, Blog, Faq, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
