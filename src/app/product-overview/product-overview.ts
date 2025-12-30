@@ -1,5 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { httpResource } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
+
+interface GumroadProduct {
+  id: string;
+  name: string;
+  preview_url: string;
+  description: string;
+  formatted_price: string;
+  short_url: string;
+  thumbnail_url: string;
+  tags: string[];
+  price: number;
+  currency: string;
+  published: boolean;
+  sales_count: number;
+  sales_usd_cents: number;
+  customizable_price: boolean;
+  require_shipping: boolean;
+  custom_receipt: string | null;
+  custom_permalink: string | null;
+  subscription_duration: string | null;
+  url: string | null;
+  file_info: { [key: string]: string };
+  max_purchase_count: number | null;
+  deleted: boolean;
+  custom_fields: any[];
+  custom_summary: string;
+  is_tiered_membership: boolean;
+  recurrences: any | null;
+  variants: any[];
+  custom_delivery_url: string | null;
+}
+
+interface GumroadProductResponse {
+  success: boolean;
+  product: GumroadProduct;
+}
 
 @Component({
   selector: 'app-product-overview',
@@ -8,23 +48,37 @@ import { CommonModule } from '@angular/common';
   templateUrl: './product-overview.html',
 })
 export class ProductOverview {
-  product = {
-    name: 'Application UI Icon Pack',
-    version: '1.0',
-    updated: 'June 5, 2021',
-    rating: 4,
-    description:
-      'The Application UI Icon Pack comes with over 200 icons in 3 styles: outline, filled, and branded. This playful icon pack is tailored for complex application user interfaces with a friendly and legible look.',
-    price: '$220',
-    highlights: [
-      '200+ SVG icons in 3 unique styles',
-      'Compatible with Figma, Sketch, and Adobe XD',
-      'Drawn on 24 x 24 pixel grid',
-    ],
-    license:
-      'For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.',
-    licenseLink: 'Read full license',
-  };
+  private readonly route = inject(ActivatedRoute);
+  private readonly accessToken = 'VIK5oqu0ZuxUBaFDYXKBhlnmtMol7eF0XJNVTQy8LSU';
+
+  id = toSignal(this.route.paramMap.pipe(map((p) => p.get('id'))));
+
+  productResource = httpResource<GumroadProductResponse>(() => {
+    const id = this.id();
+    if (!id) return undefined;
+    return `https://api.gumroad.com/v2/products/${id}?access_token=${this.accessToken}`;
+  });
+
+  product = computed(() => {
+    const response = this.productResource.value();
+    if (!response?.success) {
+      return null;
+    }
+    const p = response.product;
+    return {
+      name: p.name,
+      version: '1.0', // Mock
+      updated: 'Recently', // Mock
+      rating: 5, // Mock
+      description: p.description.replace(/<[^>]*>/g, ''),
+      price: p.formatted_price,
+      highlights: p.tags.length > 0 ? p.tags : ['High quality', 'Instant download'],
+      license: 'Standard License', // Mock
+      licenseLink: '#', // Mock
+      imageSrc: p.preview_url,
+      href: p.short_url,
+    };
+  });
 
   reviews = [
     {
@@ -48,11 +102,11 @@ export class ProductOverview {
     {
       id: 3,
       rating: 4,
-      content: `Really happy with look and options of these icons. I've found uses for them everywhere in my recent projects. I hope there will be 20px versions in the future!`,
-      date: 'July 6, 2021',
+      content: `I really like the style of these icons, but I wish there were more categories. I'm building a healthcare app and there are only a few icons that are relevant to my industry.`,
+      date: 'July 10, 2021',
       author: 'Mark Edwards',
       avatarSrc:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     },
   ];
 }
