@@ -46,8 +46,8 @@ interface GumroadResponse {
   templateUrl: './products-list-page.html',
 })
 export class ProductsListPage {
-  private readonly accessToken = 'VIK5oqu0ZuxUBaFDYXKBhlnmtMol7eF0XJNVTQy8LSU';
-  private readonly url = `https://api.gumroad.com/v2/products?access_token=${this.accessToken}`;
+  // Use local proxy to keep token secure on server
+  private readonly url = `/api/gumroad/products`;
 
   productsResource = httpResource<GumroadResponse>(() => this.url);
 

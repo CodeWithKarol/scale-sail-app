@@ -4,8 +4,12 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+import { config } from 'dotenv';
 import express from 'express';
 import { join } from 'node:path';
+
+// Load .env file if available
+config();
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -23,6 +27,56 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+app.get('/api/gumroad/products', async (req, res) => {
+  const token = process.env['GUMROAD_ACCESS_TOKEN'];
+  if (!token) {
+    console.error(
+      'Error: GUMROAD_ACCESS_TOKEN is missing. Set it in .env (local) or Vercel Dashboard (production).'
+    );
+    res.status(500).json({ error: 'Server configuration error: Missing Access Token' });
+    return;
+  }
+  try {
+    const response = await fetch(`https://api.gumroad.com/v2/products?access_token=${token}`);
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('Gumroad API Error:', response.status, text);
+      res.status(response.status).json({ error: 'Gumroad API failed', details: text });
+      return;
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Fetch Error:', error);
+    res.status(500).json({ error: 'Failed to fetch products', details: String(error) });
+  }
+});
+
+app.get('/api/gumroad/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const token = process.env['GUMROAD_ACCESS_TOKEN'];
+  if (!token) {
+    console.error(
+      'Error: GUMROAD_ACCESS_TOKEN is missing. Set it in .env (local) or Vercel Dashboard (production).'
+    );
+    res.status(500).json({ error: 'Server configuration error: Missing Access Token' });
+    return;
+  }
+  try {
+    const response = await fetch(`https://api.gumroad.com/v2/products/${id}?access_token=${token}`);
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('Gumroad API Error:', response.status, text);
+      res.status(response.status).json({ error: 'Gumroad API failed', details: text });
+      return;
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Fetch Error:', error);
+    res.status(500).json({ error: 'Failed to fetch product', details: String(error) });
+  }
+});
 
 /**
  * Serve static files from /browser
@@ -32,7 +86,7 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
@@ -41,9 +95,7 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
