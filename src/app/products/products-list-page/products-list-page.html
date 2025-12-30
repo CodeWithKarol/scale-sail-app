@@ -11,7 +11,15 @@
       <p class="text-lg text-red-500">Error loading products.</p>
     </div>
     } @else {
-    <app-product-list [products]="products()"></app-product-list>
+    <app-product-list [products]="paginatedProducts()"></app-product-list>
+    <div class="mt-16">
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalItems]="totalItems()"
+        [pageSize]="pageSize()"
+        (pageChange)="onPageChange($event)"
+      ></app-pagination>
+    </div>
     }
   </div>
 </div>

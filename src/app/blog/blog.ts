@@ -2,7 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { Post, PostCard } from './post-card/post-card';
-import { Pagination } from './pagination/pagination';
+import { Pagination } from '../shared/pagination/pagination';
 
 interface RssItem {
   title: string;

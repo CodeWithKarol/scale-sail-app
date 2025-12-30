@@ -1,7 +1,8 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { ProductList } from '../product-list/product-list';
 import { Product } from '../product-card/product-card';
+import { Pagination } from '../../shared/pagination/pagination';
 
 interface GumroadProduct {
   id: string;
@@ -41,7 +42,7 @@ interface GumroadResponse {
 
 @Component({
   selector: 'app-products-list-page',
-  imports: [ProductList],
+  imports: [ProductList, Pagination],
   templateUrl: './products-list-page.html',
 })
 export class ProductsListPage {
@@ -49,6 +50,9 @@ export class ProductsListPage {
   private readonly url = `https://api.gumroad.com/v2/products?access_token=${this.accessToken}`;
 
   productsResource = httpResource<GumroadResponse>(() => this.url);
+
+  currentPage = signal(1);
+  pageSize = signal(8);
 
   products = computed<Product[]>(() => {
     const response = this.productsResource.value();
@@ -66,4 +70,17 @@ export class ProductsListPage {
       imageAlt: p.name,
     }));
   });
+
+  paginatedProducts = computed(() => {
+    const products = this.products();
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    return products.slice(startIndex, startIndex + this.pageSize());
+  });
+
+  totalItems = computed(() => this.products().length);
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
