@@ -52,23 +52,25 @@ export class ProductsListPage {
   productsResource = httpResource<GumroadResponse>(() => this.url);
 
   currentPage = signal(1);
-  pageSize = signal(8);
+  pageSize = signal(5);
 
   products = computed<Product[]>(() => {
     const response = this.productsResource.value();
     if (!response?.success) {
       return [];
     }
-    return response.products.map((p) => ({
-      id: p.id,
-      name: p.name,
-      href: p.short_url,
-      price: p.formatted_price,
-      description: p.description.replace(/<[^>]*>/g, ''),
-      options: 'Standard',
-      imageSrc: p.preview_url,
-      imageAlt: p.name,
-    }));
+    return response.products
+      .filter((p) => p.published)
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        href: p.short_url,
+        price: p.formatted_price,
+        description: p.description.replace(/<[^>]*>/g, ''),
+        options: 'Standard',
+        imageSrc: p.preview_url,
+        imageAlt: p.name,
+      }));
   });
 
   paginatedProducts = computed(() => {
