@@ -1,18 +1,7 @@
 import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { httpResource } from '@angular/common/http';
-
-interface Post {
-  id: string;
-  title: string;
-  href: string;
-  description: string;
-  date: string;
-  datetime: string;
-  category: { title: string; href: string };
-  author: { name: string; role: string; href: string; imageUrl: string };
-  imageUrl: string;
-}
+import { Post, PostCard } from './post-card/post-card';
 
 interface RssItem {
   title: string;
@@ -44,7 +33,7 @@ interface RssResponse {
 
 @Component({
   selector: 'app-blog',
-  imports: [CommonModule],
+  imports: [CommonModule, PostCard],
   templateUrl: './blog.html',
 })
 export class Blog {
