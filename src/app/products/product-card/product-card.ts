@@ -16,6 +16,14 @@ export interface Product {
   selector: 'app-product-card',
   imports: [RouterLink],
   templateUrl: './product-card.html',
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100%;
+      }
+    `,
+  ],
 })
 export class ProductCard {
   product = input.required<Product>();
