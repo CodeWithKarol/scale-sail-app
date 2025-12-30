@@ -2,6 +2,16 @@
   <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
     <h2 class="sr-only">Products</h2>
 
-    <app-product-list [products]="products"></app-product-list>
+    @if (productsResource.isLoading()) {
+    <div class="flex justify-center p-10">
+      <p class="text-lg text-gray-500">Loading products...</p>
+    </div>
+    } @else if (productsResource.error()) {
+    <div class="flex justify-center p-10">
+      <p class="text-lg text-red-500">Error loading products.</p>
+    </div>
+    } @else {
+    <app-product-list [products]="products()"></app-product-list>
+    }
   </div>
 </div>

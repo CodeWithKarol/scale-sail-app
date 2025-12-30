@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 export interface Product {
-  id: number;
+  id: number | string;
   name: string;
   href: string;
   price: string;
