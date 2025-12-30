@@ -11,14 +11,18 @@
     <div
       class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
     >
-      @for (post of posts; track post.id) {
+      @if (blogResource.isLoading()) {
+      <div class="col-span-full flex justify-center p-10">
+        <p class="text-lg text-gray-500">Loading posts...</p>
+      </div>
+      } @else if (blogResource.error()) {
+      <div class="col-span-full flex justify-center p-10">
+        <p class="text-lg text-red-500">Error loading posts.</p>
+      </div>
+      } @else { @for (post of posts(); track post.id) {
       <article class="flex flex-col items-start justify-between">
         <div class="relative w-full">
-          <img
-            [src]="post.imageUrl"
-            alt=""
-            class="aspect-video w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
-          />
+          <img [src]="post.imageUrl" alt="" class="w-full rounded-2xl bg-gray-100" />
           <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
         </div>
         <div class="max-w-xl">
@@ -53,7 +57,7 @@
           </div>
         </div>
       </article>
-      }
+      } }
     </div>
   </div>
 </div>
