@@ -59,10 +59,10 @@ export class Blog {
         day: 'numeric',
       }),
       datetime: item.pubDate,
-      category: {
-        title: item.categories.length > 0 ? item.categories[0] : 'General',
-        href: '#',
-      },
+      categories:
+        item.categories.length > 0
+          ? item.categories.map((cat) => ({ title: cat, href: '#' }))
+          : [{ title: 'General', href: '#' }],
       author: {
         name: item.author,
         role: 'Author',

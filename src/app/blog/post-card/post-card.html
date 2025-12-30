@@ -3,18 +3,20 @@
     <img
       [src]="post().imageUrl"
       alt=""
-      class="aspect-[3/2] w-full rounded-2xl bg-gray-100 object-cover"
+      class="aspect-[3/2] w-full rounded-2xl bg-gray-100 object-contain"
     />
     <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
   </div>
   <div class="flex max-w-xl flex-1 flex-col">
-    <div class="mt-8 flex items-center gap-x-4 text-xs">
+    <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
       <time [attr.datetime]="post().datetime" class="text-gray-500">{{ post().date }}</time>
+      @for (category of post().categories; track category.title) {
       <a
-        [href]="post().category.href"
+        [href]="category.href"
         class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
-        >{{ post().category.title }}</a
+        >{{ category.title }}</a
       >
+      }
     </div>
     <div class="group relative">
       <h3
