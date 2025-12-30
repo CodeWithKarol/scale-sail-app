@@ -1,7 +1,8 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { Post, PostCard } from './post-card/post-card';
+import { Pagination } from './pagination/pagination';
 
 interface RssItem {
   title: string;
@@ -33,7 +34,7 @@ interface RssResponse {
 
 @Component({
   selector: 'app-blog',
-  imports: [CommonModule, PostCard],
+  imports: [CommonModule, PostCard, Pagination],
   templateUrl: './blog.html',
 })
 export class Blog {
@@ -41,6 +42,9 @@ export class Blog {
   private readonly apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${this.rssUrl}`;
 
   blogResource = httpResource<RssResponse>(() => this.apiUrl);
+
+  currentPage = signal(1);
+  pageSize = signal(5);
 
   posts = computed<Post[]>(() => {
     const response = this.blogResource.value();
@@ -72,6 +76,19 @@ export class Blog {
       imageUrl: item.thumbnail || this.extractImage(item.description),
     }));
   });
+
+  paginatedPosts = computed(() => {
+    const posts = this.posts();
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    return posts.slice(startIndex, startIndex + this.pageSize());
+  });
+
+  totalItems = computed(() => this.posts().length);
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   private stripHtml(html: string): string {
     if (typeof document === 'undefined') {

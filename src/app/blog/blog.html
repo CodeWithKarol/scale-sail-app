@@ -19,9 +19,17 @@
       <div class="col-span-full flex justify-center p-10">
         <p class="text-lg text-red-500">Error loading posts.</p>
       </div>
-      } @else { @for (post of posts(); track post.id) {
+      } @else { @for (post of paginatedPosts(); track post.id) {
       <app-post-card [post]="post"></app-post-card>
       } }
+    </div>
+    <div class="mt-16">
+      <app-pagination
+        [currentPage]="currentPage()"
+        [totalItems]="totalItems()"
+        [pageSize]="pageSize()"
+        (pageChange)="onPageChange($event)"
+      ></app-pagination>
     </div>
   </div>
 </div>
