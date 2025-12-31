@@ -1,0 +1,100 @@
+<div class="border-b border-gray-200">
+  <div class="-mb-px flex space-x-8" aria-label="Tabs">
+    <button
+      (click)="selectedTab.set('reviews')"
+      [class.border-indigo-600]="selectedTab() === 'reviews'"
+      [class.text-indigo-600]="selectedTab() === 'reviews'"
+      [class.border-transparent]="selectedTab() !== 'reviews'"
+      [class.text-gray-700]="selectedTab() !== 'reviews'"
+      [class.hover:border-gray-300]="selectedTab() !== 'reviews'"
+      [class.hover:text-gray-800]="selectedTab() !== 'reviews'"
+      class="whitespace-nowrap border-b-2 py-6 text-sm font-medium cursor-pointer"
+    >
+      Customer Reviews
+    </button>
+    <button
+      (click)="selectedTab.set('faq')"
+      [class.border-indigo-600]="selectedTab() === 'faq'"
+      [class.text-indigo-600]="selectedTab() === 'faq'"
+      [class.border-transparent]="selectedTab() !== 'faq'"
+      [class.text-gray-700]="selectedTab() !== 'faq'"
+      [class.hover:border-gray-300]="selectedTab() !== 'faq'"
+      [class.hover:text-gray-800]="selectedTab() !== 'faq'"
+      class="whitespace-nowrap border-b-2 py-6 text-sm font-medium cursor-pointer"
+    >
+      FAQ
+    </button>
+    <button
+      (click)="selectedTab.set('license')"
+      [class.border-indigo-600]="selectedTab() === 'license'"
+      [class.text-indigo-600]="selectedTab() === 'license'"
+      [class.border-transparent]="selectedTab() !== 'license'"
+      [class.text-gray-700]="selectedTab() !== 'license'"
+      [class.hover:border-gray-300]="selectedTab() !== 'license'"
+      [class.hover:text-gray-800]="selectedTab() !== 'license'"
+      class="whitespace-nowrap border-b-2 py-6 text-sm font-medium cursor-pointer"
+    >
+      License
+    </button>
+  </div>
+</div>
+
+<div class="mt-10">
+  @if (selectedTab() === 'reviews') {
+  <h3 class="sr-only">Customer Reviews</h3>
+
+  @for (review of reviews(); track review.id) {
+  <div class="flex space-x-4 text-sm text-gray-500">
+    <div class="flex-none py-10">
+      <img [src]="review.avatarSrc" alt="" class="h-10 w-10 rounded-full bg-gray-100" />
+    </div>
+    <div class="flex-1 py-10">
+      <h3 class="font-medium text-gray-900">{{ review.author }}</h3>
+      <p>
+        <time [attr.datetime]="review.date">{{ review.date }}</time>
+      </p>
+
+      <div class="mt-4 flex items-center">
+        @for (star of [0, 1, 2, 3, 4]; track star) {
+        <svg
+          class="h-5 w-5 flex-shrink-0"
+          [class.text-yellow-400]="review.rating > star"
+          [class.text-gray-300]="review.rating <= star"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        }
+      </div>
+      <p class="sr-only">{{ review.rating }} out of 5 stars</p>
+
+      <div class="mt-4 prose prose-sm max-w-none text-gray-500 text-pretty">
+        <p>{{ review.content }}</p>
+      </div>
+    </div>
+  </div>
+  } } @else if (selectedTab() === 'faq') {
+  <h3 class="sr-only">FAQ</h3>
+  <dl class="space-y-8">
+    @for (faq of faqs(); track faq.question) {
+    <div>
+      <dt class="font-medium text-gray-900">{{ faq.question }}</dt>
+      <dd class="mt-2 text-sm text-gray-500">{{ faq.answer }}</dd>
+    </div>
+    }
+  </dl>
+  } @else if (selectedTab() === 'license') {
+  <h3 class="sr-only">License</h3>
+  <div class="prose prose-sm max-w-none text-gray-500">
+    <h4>License Summary</h4>
+    <p>{{ license().summary }}</p>
+    <div [safeHtml]="license().content"></div>
+  </div>
+  }
+</div>
