@@ -76,13 +76,7 @@
             }
           </div>
         </div>
-        <div class="aspect-h-1 aspect-w-1 w-full">
-          <img
-            [src]="product()!.imageSrc"
-            [alt]="product()!.name"
-            class="h-full w-full object-contain object-center sm:rounded-lg"
-          />
-        </div>
+        <app-product-gallery [images]="product()!.images"></app-product-gallery>
       </div>
 
       <!-- Product info -->

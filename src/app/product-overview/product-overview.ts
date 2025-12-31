@@ -5,6 +5,7 @@ import { httpResource } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { SafeHtmlDirective } from '../shared/directives/safe-html.directive';
+import { ProductGalleryComponent } from '../products/product-gallery/product-gallery';
 
 interface GumroadProduct {
   id: string;
@@ -45,11 +46,23 @@ interface GumroadProductResponse {
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [CommonModule, SafeHtmlDirective],
+  imports: [CommonModule, SafeHtmlDirective, ProductGalleryComponent],
   templateUrl: './product-overview.html',
 })
 export class ProductOverview {
   private readonly route = inject(ActivatedRoute);
+
+  getProductImages(product: GumroadProduct): string[] {
+    const images = [product.preview_url];
+    if (product.thumbnail_url && product.thumbnail_url !== product.preview_url) {
+      images.push(product.thumbnail_url);
+    }
+    // Fill with duplicates if less than 4 to match the design request
+    while (images.length < 4) {
+      images.push(product.preview_url);
+    }
+    return images;
+  }
   private readonly accessToken = 'VIK5oqu0ZuxUBaFDYXKBhlnmtMol7eF0XJNVTQy8LSU';
 
   id = toSignal(this.route.paramMap.pipe(map((p) => p.get('id'))));
@@ -77,6 +90,9 @@ export class ProductOverview {
       description = description.replace(match[0], '');
     }
 
+    // Remove images from description
+    description = description.replace(/<img[^>]*>/g, '');
+
     return {
       name: p.name,
       version: '1.0', // Mock
@@ -88,6 +104,7 @@ export class ProductOverview {
       license: 'Standard License', // Mock
       licenseLink: '#', // Mock
       imageSrc: p.preview_url,
+      images: this.getProductImages(p),
       href: p.short_url,
       previewUrl,
     };
