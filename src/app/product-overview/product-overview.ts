@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { httpResource } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 
 interface GumroadProduct {
   id: string;
@@ -50,13 +49,14 @@ interface GumroadProductResponse {
 })
 export class ProductOverview {
   private readonly route = inject(ActivatedRoute);
+  private readonly accessToken = 'VIK5oqu0ZuxUBaFDYXKBhlnmtMol7eF0XJNVTQy8LSU';
 
   id = toSignal(this.route.paramMap.pipe(map((p) => p.get('id'))));
 
   productResource = httpResource<GumroadProductResponse>(() => {
     const id = this.id();
     if (!id) return undefined;
-    return `https://api.gumroad.com/v2/products/${id}?access_token=${environment.GUMROAD_ACCESS_TOKEN}`;
+    return `https://api.gumroad.com/v2/products/${id}?access_token=${this.accessToken}`;
   });
 
   product = computed(() => {

@@ -3,7 +3,6 @@ import { httpResource } from '@angular/common/http';
 import { ProductList } from '../product-list/product-list';
 import { Product } from '../product-card/product-card';
 import { Pagination } from '../../shared/pagination/pagination';
-import { environment } from '../../../environments/environment';
 
 interface GumroadProduct {
   id: string;
@@ -47,7 +46,8 @@ interface GumroadResponse {
   templateUrl: './products-list-page.html',
 })
 export class ProductsListPage {
-  private readonly url = `https://api.gumroad.com/v2/products?access_token=${environment.GUMROAD_ACCESS_TOKEN}`;
+  private readonly accessToken = 'VIK5oqu0ZuxUBaFDYXKBhlnmtMol7eF0XJNVTQy8LSU';
+  private readonly url = `https://api.gumroad.com/v2/products?access_token=${this.accessToken}`;
 
   productsResource = httpResource<GumroadResponse>(() => this.url);
 
