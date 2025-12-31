@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { Post, PostCard } from './post-card/post-card';
 import { Pagination } from '../shared/pagination/pagination';
+import { LoadingSpinnerComponent } from '../shared/loading-spinner/loading-spinner';
 
 interface RssItem {
   title: string;
@@ -34,7 +35,7 @@ interface RssResponse {
 
 @Component({
   selector: 'app-blog',
-  imports: [CommonModule, PostCard, Pagination],
+  imports: [CommonModule, PostCard, Pagination, LoadingSpinnerComponent],
   templateUrl: './blog.html',
 })
 export class Blog {

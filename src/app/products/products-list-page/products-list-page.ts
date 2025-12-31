@@ -3,6 +3,7 @@ import { httpResource } from '@angular/common/http';
 import { ProductList } from '../product-list/product-list';
 import { Product } from '../product-card/product-card';
 import { Pagination } from '../../shared/pagination/pagination';
+import { LoadingSpinnerComponent } from '../../shared/loading-spinner/loading-spinner';
 
 interface GumroadProduct {
   id: string;
@@ -42,7 +43,7 @@ interface GumroadResponse {
 
 @Component({
   selector: 'app-products-list-page',
-  imports: [ProductList, Pagination],
+  imports: [ProductList, Pagination, LoadingSpinnerComponent],
   templateUrl: './products-list-page.html',
 })
 export class ProductsListPage {

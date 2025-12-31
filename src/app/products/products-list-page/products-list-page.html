@@ -3,9 +3,7 @@
     <h2 class="sr-only">Products</h2>
 
     @if (productsResource.isLoading()) {
-    <div class="flex justify-center p-10">
-      <p class="text-lg text-gray-500">Loading products...</p>
-    </div>
+    <app-loading-spinner></app-loading-spinner>
     } @else if (productsResource.error()) {
     <div class="flex justify-center p-10">
       <p class="text-lg text-red-500">Error loading products.</p>

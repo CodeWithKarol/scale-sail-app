@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { SafeHtmlDirective } from '../shared/directives/safe-html.directive';
 import { ProductGalleryComponent } from '../products/product-gallery/product-gallery';
 import { ProductTabsComponent } from '../products/product-tabs/product-tabs';
+import { LoadingSpinnerComponent } from '../shared/loading-spinner/loading-spinner';
 
 interface GumroadProduct {
   id: string;
@@ -47,7 +48,13 @@ interface GumroadProductResponse {
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [CommonModule, SafeHtmlDirective, ProductGalleryComponent, ProductTabsComponent],
+  imports: [
+    CommonModule,
+    SafeHtmlDirective,
+    ProductGalleryComponent,
+    ProductTabsComponent,
+    LoadingSpinnerComponent,
+  ],
   templateUrl: './product-overview.html',
 })
 export class ProductOverview {

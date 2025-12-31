@@ -12,8 +12,8 @@
       class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
     >
       @if (blogResource.isLoading()) {
-      <div class="col-span-full flex justify-center p-10">
-        <p class="text-lg text-gray-500">Loading posts...</p>
+      <div class="col-span-full">
+        <app-loading-spinner></app-loading-spinner>
       </div>
       } @else if (blogResource.error()) {
       <div class="col-span-full flex justify-center p-10">
