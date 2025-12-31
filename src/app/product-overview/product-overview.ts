@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { httpResource } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import { SafeHtmlDirective } from '../shared/directives/safe-html.directive';
 
 interface GumroadProduct {
   id: string;
@@ -44,7 +45,7 @@ interface GumroadProductResponse {
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SafeHtmlDirective],
   templateUrl: './product-overview.html',
 })
 export class ProductOverview {
@@ -65,18 +66,30 @@ export class ProductOverview {
       return null;
     }
     const p = response.product;
+
+    let description = p.description;
+    let previewUrl = '';
+    // Extract preview URL from the description if available
+    const linkRegex = /<a[^>]*href="([^"]*)"[^>]*>.*?Live Demo.*?<\/a>/;
+    const match = description.match(linkRegex);
+    if (match) {
+      previewUrl = match[1];
+      description = description.replace(match[0], '');
+    }
+
     return {
       name: p.name,
       version: '1.0', // Mock
       updated: 'Recently', // Mock
       rating: 5, // Mock
-      description: p.description.replace(/<[^>]*>/g, ''),
+      description: description,
       price: p.formatted_price,
       highlights: p.tags.length > 0 ? p.tags : ['High quality', 'Instant download'],
       license: 'Standard License', // Mock
       licenseLink: '#', // Mock
       imageSrc: p.preview_url,
       href: p.short_url,
+      previewUrl,
     };
   });
 

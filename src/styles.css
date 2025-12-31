@@ -1,3 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@layer components {
+  .prose {
+    @apply text-gray-600 leading-7;
+  }
+  .prose p {
+    @apply mb-5;
+  }
+  .prose ul {
+    @apply list-disc pl-5 mb-5 space-y-2;
+  }
+  .prose li {
+    @apply pl-1;
+  }
+  .prose strong {
+    @apply font-semibold text-gray-900;
+  }
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    @apply font-bold text-gray-900 mt-8 mb-4;
+  }
+  .prose h3 {
+    @apply text-xl;
+  }
+  .prose a {
+    @apply text-indigo-600 hover:text-indigo-500 font-medium underline decoration-indigo-600/30 hover:decoration-indigo-600;
+  }
+  .prose code {
+    @apply bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-medium font-mono border border-gray-200;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-gray-200 pl-4 italic text-gray-700 my-6;
+  }
+}
